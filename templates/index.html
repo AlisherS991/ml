@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IT Career Predictor</title>
+    <style>
+        body { background: #121212; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: #1e1e1e; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 450px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border-radius: 8px; border: 1px solid #333; background: #2d2d2d; color: white; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #0056b3; transform: scale(1.05); }
+        #result { margin-top: 25px; font-size: 1.2em; color: #00ff88; min-height: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Role Predictor</h1>
+        <p>Type your skills to find your IT specialty</p>
+        <input type="text" id="skills" placeholder="e.g. Python, SQL, Docker, AWS">
+        <button onclick="sendData()">Predict My Role</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function sendData() {
+            const skills = document.getElementById('skills').value;
+            const resDiv = document.getElementById('result');
+            resDiv.innerText = "Analyzing...";
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({skills: skills})
+            });
+            const data = await response.json();
+            resDiv.innerText = data.role ? "Recommended: " + data.role : "Error: " + data.error;
+        }
+    </script>
+</body>
+</html>
